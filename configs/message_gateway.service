@@ -1,0 +1,15 @@
+[Unit]
+Description=Message Gateway Service
+After=network.target
+
+[Service]
+User=smsd
+Group=dialout
+
+ExecStart=/usr/local/bin/message_gateway
+TimeoutSec=30
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

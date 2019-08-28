@@ -20,7 +20,9 @@ type APIHandler struct {
 }
 
 // NewAPIHandler creates new API handler
-func NewAPIHandler(senders map[handler.MessageTransport]handler.Sender, logger *zap.Logger, version string) *APIHandler {
+func NewAPIHandler(
+	senders map[handler.MessageTransport]handler.Sender, logger *zap.Logger, version string) *APIHandler {
+
 	return &APIHandler{
 		logger:  logger,
 		version: version,

@@ -34,7 +34,7 @@ type Vars struct {
 func LoadConfig(logger *zap.Logger) Vars {
 	viper.SetConfigName(configName)
 	viper.AddConfigPath("configs")
-	viper.AddConfigPath("/etc/message_gateway")
+	viper.AddConfigPath("/etc")
 	if err := viper.ReadInConfig(); err != nil {
 		logger.Fatal("Failed to read config file", zap.Error(err))
 	}

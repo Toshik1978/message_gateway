@@ -23,6 +23,7 @@ func NewTelegram(vars service.Vars, client *http.Client, logger *zap.Logger) han
 	if err != nil {
 		logger.Fatal("Failed to initialize Telegram", zap.Error(err))
 	}
+	logger.Info("Telegram bot initialized")
 	return &telegram{
 		bot:    bot,
 		logger: logger,
@@ -30,6 +31,8 @@ func NewTelegram(vars service.Vars, client *http.Client, logger *zap.Logger) han
 }
 
 func (t *telegram) Send(ctx context.Context, target string, text string) error {
+	t.logger.Info("Send telegram message", zap.String("to", target))
+
 	// target is channel id
 	channelID, err := strconv.ParseInt(target, 10, 64)
 	if err != nil {

@@ -23,6 +23,8 @@ type email struct {
 
 // NewEmail creates new instance of email
 func NewEmail(vars service.Vars, logger *zap.Logger) handler.Sender {
+	logger.Info("Email initialized")
+
 	return &email{
 		name:     vars.EmailName,
 		subject:  vars.EmailSubject,
@@ -35,6 +37,8 @@ func NewEmail(vars service.Vars, logger *zap.Logger) handler.Sender {
 }
 
 func (e *email) Send(ctx context.Context, target string, text string) error {
+	e.logger.Info("Send email", zap.String("to", target))
+
 	message :=
 		"From: " + e.name + "\n" +
 			"To: " + target + "\n" +

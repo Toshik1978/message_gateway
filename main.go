@@ -9,6 +9,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Toshik1978/message_gateway/handler/sms"
+
 	"github.com/Toshik1978/message_gateway/handler"
 	"github.com/Toshik1978/message_gateway/handler/email"
 	"github.com/Toshik1978/message_gateway/handler/httphandler"
@@ -42,11 +44,13 @@ func main() {
 
 	vars := service.LoadConfig(logger)
 	httpClient := service.NewHTTPClient(vars, logger)
+	smsClient := sms.NewSMS(vars, logger)
 	telegramClient := telegram.NewTelegram(vars, httpClient, logger)
 	emailClient := email.NewEmail(vars, logger)
 	server := initializeHTTP(
 		vars,
 		map[handler.MessageTransport]handler.Sender{
+			handler.SMSMessageTransport:      smsClient,
 			handler.TelegramMessageTransport: telegramClient,
 			handler.EmailMessageTransport:    emailClient,
 		},
