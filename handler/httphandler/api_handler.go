@@ -61,9 +61,9 @@ func (h *APIHandler) SendHandler() http.Handler {
 
 		errs := make([]error, 0)
 		sent := false
-		for _, transport := range message.Transports {
-			if sender, ok := h.senders[transport]; ok {
-				err := sender.Send(ctx, message.Target, message.Text)
+		for _, msg := range message.Messages {
+			if sender, ok := h.senders[msg.Transport]; ok {
+				err := sender.Send(ctx, msg.Target, message.Text)
 				if err == nil {
 					sent = true
 					break

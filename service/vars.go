@@ -21,6 +21,7 @@ type Vars struct {
 
 	SMSIncomingPath string
 	SMSOutgoingPath string
+	SMSTempPath     string
 
 	EmailName    string
 	EmailSubject string
@@ -47,6 +48,7 @@ func LoadConfig(logger *zap.Logger) Vars {
 		TelegramToken:   viper.GetString("telegram.token"),
 		SMSIncomingPath: viper.GetString("sms.incoming"),
 		SMSOutgoingPath: viper.GetString("sms.outgoing"),
+		SMSTempPath:     viper.GetString("sms.temp"),
 		EmailName:       viper.GetString("email.from"),
 		EmailSubject:    viper.GetString("email.subject"),
 		EmailSMTP:       viper.GetString("email.smtp"),

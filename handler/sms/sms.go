@@ -19,6 +19,7 @@ const (
 type sms struct {
 	incomingPath string
 	outgoingPath string
+	tempPath     string
 
 	logger *zap.Logger
 }
@@ -28,6 +29,7 @@ func NewSMS(vars service.Vars, logger *zap.Logger) handler.Sender {
 	return &sms{
 		incomingPath: vars.SMSIncomingPath,
 		outgoingPath: vars.SMSOutgoingPath,
+		tempPath:     vars.SMSTempPath,
 		logger:       logger,
 	}
 }
@@ -50,7 +52,7 @@ func (e *sms) Send(ctx context.Context, target string, text string) error {
 
 // createTempFile creates temp file with message
 func (e *sms) createTempFile(message string) (string, error) {
-	file, err := ioutil.TempFile("", tmpPrefix)
+	file, err := ioutil.TempFile(e.tempPath, tmpPrefix)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to create tmp file")
 	}
