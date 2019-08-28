@@ -40,7 +40,7 @@ func (e *sms) Send(ctx context.Context, target string, text string) error {
 	message :=
 		"To: " + target + "\n" +
 			"Alphabet: ISO\n" +
-			"UDH: false\n" +
+			"UDH: false\n\n" +
 			text + "\n"
 
 	fileName, err := e.createTempFile(message)
