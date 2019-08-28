@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/Toshik1978/message_gateway/handler"
+	"github.com/Toshik1978/message_gateway/handler/email"
 	"github.com/Toshik1978/message_gateway/handler/httphandler"
 	"github.com/Toshik1978/message_gateway/handler/telegram"
 	"github.com/Toshik1978/message_gateway/service"
@@ -42,7 +43,14 @@ func main() {
 	vars := service.LoadConfig(logger)
 	httpClient := service.NewHTTPClient(vars, logger)
 	telegramClient := telegram.NewTelegram(vars, httpClient, logger)
-	server := initializeHTTP(vars, telegramClient, logger)
+	emailClient := email.NewEmail(vars, logger)
+	server := initializeHTTP(
+		vars,
+		map[handler.MessageTransport]handler.Sender{
+			handler.TelegramMessageTransport: telegramClient,
+			handler.EmailMessageTransport:    emailClient,
+		},
+		logger)
 
 	waitShutdown(logger, server)
 }
@@ -62,8 +70,10 @@ func initializeLogger() *zap.Logger {
 }
 
 // initializeHTTP initializes HTTP server
-func initializeHTTP(vars service.Vars, telegramClient handler.Sender, logger *zap.Logger) *http.Server {
-	apiHandler := httphandler.NewAPIHandler(telegramClient, logger, GitVersion)
+func initializeHTTP(vars service.Vars,
+	senders map[handler.MessageTransport]handler.Sender, logger *zap.Logger) *http.Server {
+
+	apiHandler := httphandler.NewAPIHandler(senders, logger, GitVersion)
 	r := mux.NewRouter()
 	r.Use(httphandler.NewCatchPanicMiddleware(logger).Middleware)
 	r.Use(httphandler.NewAccessLogMiddleware(logger).Middleware)

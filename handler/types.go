@@ -11,7 +11,7 @@ const (
 
 // SendMessage declare send message model
 type SendMessage struct {
-	Transport MessageTransport `json:"transport"`
-	Target    string           `json:"target"`
-	Text      string           `json:"text"`
+	Transports []MessageTransport `json:"transports"`
+	Target     string             `json:"target"`
+	Text       string             `json:"text"`
 }

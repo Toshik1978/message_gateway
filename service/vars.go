@@ -22,10 +22,12 @@ type Vars struct {
 	SMSIncomingPath string
 	SMSOutgoingPath string
 
-	EmailName  string
-	EmailSMTP  string
-	EmailLogin string
-	EmailPass  string
+	EmailName    string
+	EmailSubject string
+	EmailSMTP    string
+	EmailPort    string
+	EmailLogin   string
+	EmailPass    string
 }
 
 // LoadConfig load's configuration file
@@ -46,7 +48,9 @@ func LoadConfig(logger *zap.Logger) Vars {
 		SMSIncomingPath: viper.GetString("sms.incoming"),
 		SMSOutgoingPath: viper.GetString("sms.outgoing"),
 		EmailName:       viper.GetString("email.from"),
+		EmailSubject:    viper.GetString("email.subject"),
 		EmailSMTP:       viper.GetString("email.smtp"),
+		EmailPort:       viper.GetString("email.smtp_port"),
 		EmailLogin:      viper.GetString("email.login"),
 		EmailPass:       viper.GetString("email.pass"),
 	}

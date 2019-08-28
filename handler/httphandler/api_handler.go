@@ -3,11 +3,11 @@ package httphandler
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"net/http"
 	"time"
 
 	"github.com/Toshik1978/message_gateway/handler"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )
 
@@ -16,15 +16,15 @@ type APIHandler struct {
 	logger  *zap.Logger
 	version string
 
-	telegramClient handler.Sender
+	senders map[handler.MessageTransport]handler.Sender
 }
 
 // NewAPIHandler creates new API handler
-func NewAPIHandler(telegramClient handler.Sender, logger *zap.Logger, version string) *APIHandler {
+func NewAPIHandler(senders map[handler.MessageTransport]handler.Sender, logger *zap.Logger, version string) *APIHandler {
 	return &APIHandler{
-		logger:         logger,
-		version:        version,
-		telegramClient: telegramClient,
+		logger:  logger,
+		version: version,
+		senders: senders,
 	}
 }
 
@@ -57,19 +57,26 @@ func (h *APIHandler) SendHandler() http.Handler {
 			return
 		}
 
-		var err error
-		switch message.Transport {
-		case handler.SMSMessageTransport:
-			err = errors.New("unsupported sms transport")
-		case handler.TelegramMessageTransport:
-			err = h.telegramClient.Send(ctx, message.Target, message.Text)
-		case handler.EmailMessageTransport:
-			err = errors.New("unsupported email transport")
-		default:
-			err = errors.New("failed to detect valid message transport")
+		errs := make([]error, 0)
+		sent := false
+		for _, transport := range message.Transports {
+			if sender, ok := h.senders[transport]; ok {
+				err := sender.Send(ctx, message.Target, message.Text)
+				if err == nil {
+					sent = true
+					break
+				} else {
+					errs = append(errs, err)
+				}
+			}
 		}
 
-		if h.fail(w, err, "SendHandler") {
+		if !sent {
+			errText := ""
+			for _, err := range errs {
+				errText += err.Error() + "\n"
+			}
+			_ = h.fail(w, errors.Errorf("failed to send message: %s", errText), "SendHandler")
 			return
 		}
 		w.WriteHeader(http.StatusOK)

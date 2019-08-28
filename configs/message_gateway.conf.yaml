@@ -11,6 +11,8 @@ sms:
   outgoing: /var/spool/sms/outgoing/
 email:
   from:
-  smtp: smtp.gmail.com:587
+  subject: "Home Alert"
+  smtp: smtp.gmail.com
+  smtp_port: 587
   login:
   pass:
