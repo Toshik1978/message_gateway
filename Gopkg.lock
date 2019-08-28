@@ -26,6 +26,14 @@
   version = "1.3.1"
 
 [[projects]]
+  digest = "1:cbec35fe4d5a4fba369a656a8cd65e244ea2c743007d8f6c1ccb132acf9d1296"
+  name = "github.com/gorilla/mux"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "00bdffe0f3c77e27d2cf6f5c70232a2d3e4d9c15"
+  version = "v1.7.3"
+
+[[projects]]
   digest = "1:c0d19ab64b32ce9fe5cf4ddceba78d5bc9807f0016db6b1183599da3dcc24d10"
   name = "github.com/hashicorp/hcl"
   packages = [
@@ -206,9 +214,11 @@
   input-imports = [
     "github.com/go-telegram-bot-api/telegram-bot-api",
     "github.com/golang/mock/gomock",
+    "github.com/gorilla/mux",
     "github.com/pkg/errors",
     "github.com/spf13/viper",
     "go.uber.org/zap",
+    "go.uber.org/zap/zapcore",
     "golang.org/x/net/proxy",
   ]
   solver-name = "gps-cdcl"

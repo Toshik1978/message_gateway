@@ -8,3 +8,10 @@ const (
 	TelegramMessageTransport
 	EmailMessageTransport
 )
+
+// SendMessage declare send message model
+type SendMessage struct {
+	Transport MessageTransport `json:"transport"`
+	Target    string           `json:"target"`
+	Text      string           `json:"text"`
+}
