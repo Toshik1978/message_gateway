@@ -1,0 +1,16 @@
+http:
+  address: 0.0.0.0:8080
+proxy:
+  address:
+  login:
+  pass:
+telegram:
+  token:
+sms:
+  incoming: /var/spool/sms/incoming/
+  outgoing: /var/spool/sms/outgoing/
+email:
+  from:
+  smtp: smtp.gmail.com:587
+  login:
+  pass:
