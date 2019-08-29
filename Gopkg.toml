@@ -40,10 +40,22 @@
   name = "github.com/pkg/errors"
   version = "0.8.1"
 
-[prune]
-  go-tests = true
-  unused-packages = true
-
 [[constraint]]
   name = "github.com/gorilla/mux"
   version = "1.7.3"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/robbiet480/go.nut"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/sparrc/go-ping"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/kylegrantlucas/speedtest"
+
+[prune]
+  go-tests = true
+  unused-packages = true

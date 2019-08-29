@@ -21,8 +21,8 @@ type email struct {
 	logger *zap.Logger
 }
 
-// NewEmail creates new instance of email
-func NewEmail(vars service.Vars, logger *zap.Logger) handler.Sender {
+// NewClient creates new instance of email
+func NewClient(vars service.Vars, logger *zap.Logger) handler.Sender {
 	logger.Info("Email initialized")
 
 	return &email{

@@ -24,8 +24,8 @@ type sms struct {
 	logger *zap.Logger
 }
 
-// NewSMS creates new instance of sms
-func NewSMS(vars service.Vars, logger *zap.Logger) handler.Sender {
+// NewClient creates new instance of sms
+func NewClient(vars service.Vars, logger *zap.Logger) handler.Sender {
 	return &sms{
 		incomingPath: vars.SMSIncomingPath,
 		outgoingPath: vars.SMSOutgoingPath,

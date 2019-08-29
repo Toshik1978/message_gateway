@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  branch = "master"
+  digest = "1:fdae1c338ec6667687fb3fdbde842b3c421c930163981b5d441502b240b7f50b"
+  name = "github.com/dchest/uniuri"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "8902c56451e9b58ff940bbe5fec35d5f9c04584a"
+
+[[projects]]
   digest = "1:abeb38ade3f32a92943e5be54f55ed6d6e3b6602761d74b4aab4c9dd45c18abd"
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
@@ -53,6 +61,20 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:55f089b1e361a4f914da543f651f6ffe2d878d8186d64d261f174ecb32b92cc9"
+  name = "github.com/kylegrantlucas/speedtest"
+  packages = [
+    ".",
+    "coords",
+    "http",
+    "util",
+    "xml",
+  ]
+  pruneopts = "UT"
+  revision = "f8512f58e7ead921fded157e7fc4261a694679f5"
+
+[[projects]]
   digest = "1:5a0ef768465592efca0412f7e838cdc0826712f8447e70e6ccc52eb441e9ab13"
   name = "github.com/magiconair/properties"
   packages = ["."]
@@ -83,6 +105,22 @@
   pruneopts = "UT"
   revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
   version = "v0.8.1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:1ee024cb44135e2191d5b057bac2ac53e9acb4c945d29954b8f1ac4faab4d00b"
+  name = "github.com/robbiet480/go.nut"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "246697bfaea771ddfe4ce0d754e6e2a7b8214f0f"
+
+[[projects]]
+  branch = "master"
+  digest = "1:c89853e0581e99bd299bf801fa09b845fb57c40fcb03e2ba5d2bc3e98a10f698"
+  name = "github.com/sparrc/go-ping"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "4e5b6552494c8005c60de6c60b50ebaefc69e592"
 
 [[projects]]
   digest = "1:bb495ec276ab82d3dd08504bbc0594a65de8c3b22c6f2aaa92d05b73fbf3a82e"
@@ -168,10 +206,16 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:3e0062766e6b0bcfe1ba1ed1d3f08a8e1e99cd5831426e2596dc9537d28f2adb"
+  digest = "1:f992a2ed01ad1481ce9dff4815bb4b49aafe0a374c375a023b60df119721d985"
   name = "golang.org/x/net"
   packages = [
+    "bpf",
+    "icmp",
+    "internal/iana",
+    "internal/socket",
     "internal/socks",
+    "ipv4",
+    "ipv6",
     "proxy",
   ]
   pruneopts = "UT"
@@ -179,9 +223,12 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:47844666be86089349a441f5f0ece22f42a87a8cb8c9a31294c593f43209ad19"
+  digest = "1:c5b5d55096b762e29d0b887ce73932d06ddcf9def4285f1abd09f801176878ec"
   name = "golang.org/x/sys"
-  packages = ["unix"]
+  packages = [
+    "unix",
+    "windows",
+  ]
   pruneopts = "UT"
   revision = "c7b8b68b14567162c6602a7c5659ee0f26417c18"
 
@@ -215,7 +262,10 @@
     "github.com/go-telegram-bot-api/telegram-bot-api",
     "github.com/golang/mock/gomock",
     "github.com/gorilla/mux",
+    "github.com/kylegrantlucas/speedtest",
     "github.com/pkg/errors",
+    "github.com/robbiet480/go.nut",
+    "github.com/sparrc/go-ping",
     "github.com/spf13/viper",
     "go.uber.org/zap",
     "go.uber.org/zap/zapcore",

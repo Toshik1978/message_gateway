@@ -29,6 +29,13 @@ type Vars struct {
 	EmailPort    string
 	EmailLogin   string
 	EmailPass    string
+
+	UpsAddress string
+	UpsName    string
+	UpsLogin   string
+	UpsPass    string
+
+	PingHosts string
 }
 
 // LoadConfig load's configuration file
@@ -55,5 +62,10 @@ func LoadConfig(logger *zap.Logger) Vars {
 		EmailPort:       viper.GetString("email.smtp_port"),
 		EmailLogin:      viper.GetString("email.login"),
 		EmailPass:       viper.GetString("email.pass"),
+		UpsAddress:      viper.GetString("ups.address"),
+		UpsName:         viper.GetString("ups.name"),
+		UpsLogin:        viper.GetString("ups.login"),
+		UpsPass:         viper.GetString("ups.pass"),
+		PingHosts:       viper.GetString("ping.hosts"),
 	}
 }

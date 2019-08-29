@@ -17,3 +17,10 @@ email:
   smtp_port: 587
   login:
   pass:
+ups:
+  address:
+  name: ups
+  login: upsmon
+  pass:
+ping:
+  hosts:

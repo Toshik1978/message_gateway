@@ -9,11 +9,14 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Toshik1978/message_gateway/handler/sms"
-
+	"github.com/Toshik1978/message_gateway/command"
+	"github.com/Toshik1978/message_gateway/command/ping"
+	"github.com/Toshik1978/message_gateway/command/speedtest"
+	"github.com/Toshik1978/message_gateway/command/ups"
 	"github.com/Toshik1978/message_gateway/handler"
 	"github.com/Toshik1978/message_gateway/handler/email"
 	"github.com/Toshik1978/message_gateway/handler/httphandler"
+	"github.com/Toshik1978/message_gateway/handler/sms"
 	"github.com/Toshik1978/message_gateway/handler/telegram"
 	"github.com/Toshik1978/message_gateway/service"
 	"github.com/gorilla/mux"
@@ -44,9 +47,9 @@ func main() {
 
 	vars := service.LoadConfig(logger)
 	httpClient := service.NewHTTPClient(vars, logger)
-	smsClient := sms.NewSMS(vars, logger)
-	telegramClient := telegram.NewTelegram(vars, httpClient, logger)
-	emailClient := email.NewEmail(vars, logger)
+	smsClient := sms.NewClient(vars, logger)
+	telegramClient, telegramReceiver := initializeTelegram(vars, httpClient, logger)
+	emailClient := email.NewClient(vars, logger)
 	server := initializeHTTP(
 		vars,
 		map[handler.MessageTransport]handler.Sender{
@@ -55,8 +58,9 @@ func main() {
 			handler.EmailMessageTransport:    emailClient,
 		},
 		logger)
+	telegramReceiver.Receive(context.Background())
 
-	waitShutdown(logger, server)
+	waitShutdown(logger, telegramReceiver, server)
 }
 
 // initializeLogger initializes logger
@@ -71,6 +75,18 @@ func initializeLogger() *zap.Logger {
 		log.Fatal("Initialize logger failed", err)
 	}
 	return logger
+}
+
+// initializeTelegram initialized Telegram
+func initializeTelegram(vars service.Vars,
+	httpClient *http.Client, logger *zap.Logger) (handler.Sender, handler.Receiver) {
+
+	return telegram.NewClient(vars, httpClient, logger,
+		[]command.Command{
+			ups.NewCommand(vars, logger),
+			ping.NewCommand(vars, logger),
+			speedtest.NewCommand(vars, logger),
+		})
 }
 
 // initializeHTTP initializes HTTP server
@@ -107,9 +123,12 @@ func initializeHTTP(vars service.Vars,
 	return server
 }
 
-func waitShutdown(logger *zap.Logger, server *http.Server) {
+// waitShutdown waits to stop all activities
+func waitShutdown(logger *zap.Logger, receiver handler.Receiver, server *http.Server) {
 	// Wait for interrupt
 	<-interruptCh
+
+	receiver.Stop()
 
 	ctx, cancel := context.WithTimeout(context.Background(), httpShutdownTimeout)
 	defer cancel()
