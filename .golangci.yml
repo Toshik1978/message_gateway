@@ -1,0 +1,21 @@
+run:
+  tests: false
+  skip-dirs:
+    - mock
+
+linters:
+  enable:
+    - stylecheck
+    - gofmt
+    - goimports
+    - golint
+    - unconvert
+    - goconst
+    - unparam
+    - scopelint
+    - lll
+
+issues:
+  exclude:
+    - "not declared by package utf8"
+    - "unicode/utf8/utf8.go"

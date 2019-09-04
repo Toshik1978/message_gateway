@@ -7,15 +7,19 @@ DOCKER		= docker
 GIT_VERSION	= $(shell git rev-list -1 HEAD)
 CURRENT_DIR = $(shell pwd)
 
-.PHONY: all prereq build lint test mock clean
+.PHONY: all modules prereq mock build lint test test_race clean
 .DEFAULT_GOAL := all
 
 all: test build
 
+modules:
+	@$(GOCMD) mod download
+
 prereq:
 	@curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOPATH)/bin
-	@$(GOCMD) get github.com/axw/gocov/gocov
-	@$(GOCMD) get github.com/golang/mock/gomock
+	@$(GOCMD) get github.com/axw/gocov
+	@$(GOCMD) get github.com/golang/mock
+	@$(GOCMD) install github.com/axw/gocov/gocov
 	@$(GOCMD) install github.com/golang/mock/mockgen
 
 mock:
@@ -25,7 +29,7 @@ build:
 	@$(GOCMD) build -ldflags "-X main.GitVersion=$(GIT_VERSION)"
 
 lint:
-	@$(GOLINT) run ./... -E stylecheck -E gofmt -E goimports -E golint -E unconvert -E goconst -E unparam -E scopelint -E lll -v --skip-dirs "mock" --tests=false
+	@$(GOLINT) run ./... -v
 
 test: lint
 	@$(GOCOV) test ./... -v | $(GOCOV) report
