@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"go.uber.org/zap"
-
 	"golang.org/x/net/proxy"
 )
 

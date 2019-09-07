@@ -1,4 +1,4 @@
-module github.com/Toshik1978/message_gateway
+module gitlab.thedatron.ru/anton/message_gateway
 
 go 1.12
 

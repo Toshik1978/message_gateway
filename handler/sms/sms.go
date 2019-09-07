@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Toshik1978/message_gateway/handler"
-	"github.com/Toshik1978/message_gateway/service"
 	"github.com/pkg/errors"
+	"gitlab.thedatron.ru/anton/message_gateway/handler"
+	"gitlab.thedatron.ru/anton/message_gateway/service"
 	"go.uber.org/zap"
 )
 

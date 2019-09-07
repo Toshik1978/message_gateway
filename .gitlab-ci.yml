@@ -1,0 +1,32 @@
+stages:
+  - test
+  - build
+
+variables:
+  CONTAINER_IMAGE: registry.thedatron.ru/$CI_PROJECT_PATH
+
+tests:
+  stage: test
+  image: golang:1.13.0
+  script:
+    - export GOPATH=$CI_GOPATH
+    - export GOPROXY=$CI_GOPROXY
+    - export PATH=$CI_GOPATH/bin:$PATH
+    - ln -s $CI_PROJECT_DIR /app
+    - cd /app
+    - make modules
+    - make prereq
+    - make test
+
+build:
+  stage: build
+  image: docker:19
+  script:
+    - docker build --build-arg CI_GOPATH --build-arg CI_GOPROXY --tag $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME --tag $CONTAINER_IMAGE:latest .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.thedatron.ru
+    - docker push $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME
+    - docker push $CONTAINER_IMAGE:latest
+    - docker image rm $CONTAINER_IMAGE:$CI_COMMIT_REF_NAME
+    - docker image rm $CONTAINER_IMAGE:latest
+  only:
+    - tags

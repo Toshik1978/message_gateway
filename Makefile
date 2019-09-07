@@ -7,7 +7,7 @@ DOCKER		= docker
 GIT_VERSION	= $(shell git rev-list -1 HEAD)
 CURRENT_DIR = $(shell pwd)
 
-.PHONY: all modules prereq mock build lint test test_race clean
+.PHONY: all modules prereq mock build lint test test_race image clean
 .DEFAULT_GOAL := all
 
 all: test build
@@ -36,6 +36,9 @@ test: lint
 
 test_race: lint
 	@$(GOCOV) test ./... -race -v | $(GOCOV) report
+
+image:
+	@$(DOCKER) build -t message_gateway .
 
 clean:
 	@$(GOCMD) clean

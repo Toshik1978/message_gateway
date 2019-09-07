@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Toshik1978/message_gateway/command"
-	"github.com/Toshik1978/message_gateway/service"
 	"github.com/pkg/errors"
 	nut "github.com/robbiet480/go.nut"
+	"gitlab.thedatron.ru/anton/message_gateway/command"
+	"gitlab.thedatron.ru/anton/message_gateway/service"
 	"go.uber.org/zap"
 )
 
