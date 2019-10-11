@@ -3,6 +3,7 @@ package ping
 import (
 	"context"
 	"strings"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/sparrc/go-ping"
@@ -38,6 +39,7 @@ func (c *pingCommand) Reply(ctx context.Context) (string, error) {
 			return "", errors.Wrap(err, "failed to ping")
 		}
 		pinger.Count = 3
+		pinger.Timeout = 5 * time.Second
 		pinger.Run()
 		statistics := pinger.Statistics()
 		if statistics.PacketsSent == statistics.PacketsRecv {

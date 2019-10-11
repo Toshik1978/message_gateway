@@ -89,16 +89,18 @@ func (t *telegram) Receive(ctx context.Context) {
 				if message.IsCommand() {
 					cmd := t.commands[message.Command()]
 					if cmd != nil {
-						text, err := cmd.Reply(ctx)
-						if err != nil {
-							t.logger.Error("Failed to process reply", zap.Error(err))
-							text = errorOccurred
-						}
+						go func(ctx context.Context, chatID int64) { // Run command processing async
+							text, err := cmd.Reply(ctx)
+							if err != nil {
+								t.logger.Error("Failed to process reply", zap.Error(err))
+								text = errorOccurred
+							}
 
-						reply := tgbotapi.NewMessage(message.Chat.ID, text)
-						if _, err := t.bot.Send(&reply); err != nil {
-							t.logger.Error("Failed to send reply", zap.Error(err))
-						}
+							reply := tgbotapi.NewMessage(chatID, text)
+							if _, err := t.bot.Send(&reply); err != nil {
+								t.logger.Error("Failed to send reply", zap.Error(err))
+							}
+						}(ctx, message.Chat.ID)
 					}
 				}
 			}
