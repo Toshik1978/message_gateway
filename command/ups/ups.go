@@ -16,28 +16,22 @@ const (
 )
 
 type upsCommand struct {
-	client nut.Client
-	ups    nut.UPS
+	logger  *zap.Logger
+	address string
+	name    string
+	login   string
+	pass    string
 }
 
 // NewCommand creates command to process UPS
 func NewCommand(vars service.Vars, logger *zap.Logger) command.Command {
-	client, err := nut.Connect(vars.UpsAddress)
-	if err != nil {
-		logger.Fatal("Failed to initialize NUT", zap.Error(err))
-	}
-	if ok, err := client.Authenticate(vars.UpsLogin, vars.UpsPass); !ok || err != nil {
-		logger.Fatal("Failed to authenticate in NUT", zap.Error(err))
-	}
-	ups, err := nut.NewUPS(vars.UpsName, &client)
-	if err != nil {
-		logger.Fatal("Failed to initialize UPS", zap.Error(err))
-	}
-
 	logger.Info("UPS command started")
 	return &upsCommand{
-		client: client,
-		ups:    ups,
+		logger:  logger,
+		address: vars.UpsAddress,
+		name:    vars.UpsName,
+		login:   vars.UpsLogin,
+		pass:    vars.UpsPass,
 	}
 }
 
@@ -46,7 +40,13 @@ func (c *upsCommand) Command() string {
 }
 
 func (c *upsCommand) Reply(ctx context.Context) (string, error) {
-	vars, err := c.ups.GetVariables()
+	ups, client, err := c.connect()
+	if err != nil {
+		return "", errors.Wrap(err, "failed to connect to ups")
+	}
+	defer c.disconnect(client)
+
+	vars, err := ups.GetVariables()
 	if err != nil {
 		return "", errors.Wrap(err, "failed to get nut variables")
 	}
@@ -58,4 +58,23 @@ func (c *upsCommand) Reply(ctx context.Context) (string, error) {
 		}
 	}
 	return "Voltage: unknown", nil
+}
+
+func (c *upsCommand) connect() (*nut.UPS, *nut.Client, error) {
+	client, err := nut.Connect(c.address)
+	if err != nil {
+		return nil, nil, errors.Wrap(err, "failed to connect to nut")
+	}
+	if ok, err := client.Authenticate(c.login, c.pass); !ok || err != nil {
+		return nil, nil, errors.Wrap(err, "failed to auth to nut")
+	}
+	ups, err := nut.NewUPS(c.name, &client)
+	if err != nil {
+		return nil, nil, errors.Wrap(err, "failed to initialize ups")
+	}
+	return &ups, &client, nil
+}
+
+func (c *upsCommand) disconnect(client *nut.Client) {
+	_, _ = client.Disconnect()
 }
