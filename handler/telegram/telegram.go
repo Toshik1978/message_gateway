@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/Toshik1978/message_gateway/command"
+	"github.com/Toshik1978/message_gateway/handler"
+	"github.com/Toshik1978/message_gateway/service"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/pkg/errors"
-	"gitlab.thedatron.ru/anton/message_gateway/command"
-	"gitlab.thedatron.ru/anton/message_gateway/handler"
-	"gitlab.thedatron.ru/anton/message_gateway/service"
 	"go.uber.org/zap"
 )
 

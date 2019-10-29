@@ -1,11 +1,8 @@
 ## Builder
 FROM golang:1.13.0 AS build
 
-ARG CI_GOPATH
-ARG CI_GOPROXY
-
-ENV GOPATH ${CI_GOPATH:-/.go/}
-ENV GOPROXY ${CI_GOPROXY:-https://proxy.golang.org/}
+ENV GOPATH /.go/
+ENV GOPROXY https://proxy.golang.org/,direct
 
 # Go modules
 WORKDIR /app

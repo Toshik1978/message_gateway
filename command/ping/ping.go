@@ -5,10 +5,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Toshik1978/message_gateway/command"
+	"github.com/Toshik1978/message_gateway/service"
 	"github.com/pkg/errors"
 	"github.com/sparrc/go-ping"
-	"gitlab.thedatron.ru/anton/message_gateway/command"
-	"gitlab.thedatron.ru/anton/message_gateway/service"
 	"go.uber.org/zap"
 )
 

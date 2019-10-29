@@ -1,45 +1,42 @@
-GOCMD		= go
-GOPATH		= $(shell $(GOCMD) env GOPATH)
-GOLINT		= golangci-lint
-GOCOV		= gocov
-DOCKER		= docker
+GOPATH		= $(shell go env GOPATH)
 
 GIT_VERSION	= $(shell git rev-list -1 HEAD)
 CURRENT_DIR = $(shell pwd)
 
-.PHONY: all modules prereq mock build lint test test_race image clean
+.PHONY: all modules prereq mock build lint test test+race test+ci image clean
 .DEFAULT_GOAL := all
 
 all: test build
 
 modules:
-	@$(GOCMD) mod download
+	@go mod download
 
 prereq:
 	@curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOPATH)/bin
-	@$(GOCMD) get github.com/axw/gocov
-	@$(GOCMD) get github.com/golang/mock
-	@$(GOCMD) install github.com/axw/gocov/gocov
-	@$(GOCMD) install github.com/golang/mock/mockgen
+	@go get -u github.com/axw/gocov/gocov
+	@go get -u github.com/golang/mock/mockgen
 
 mock:
-	@$(GOCMD) generate ./...
+	@go generate ./...
 
 build:
-	@$(GOCMD) build -ldflags "-X main.GitVersion=$(GIT_VERSION)"
+	@go build -ldflags "-X main.GitVersion=$(GIT_VERSION)"
 
 lint:
-	@$(GOLINT) run ./... -v
+	@golangci-lint run ./... -v
 
 test: lint
-	@$(GOCOV) test ./... -v | $(GOCOV) report
+	@go test ./...
 
-test_race: lint
-	@$(GOCOV) test ./... -race -v | $(GOCOV) report
+test+race: lint
+	@go test ./... -race
+
+test+ci: lint
+	@go test ./... -coverprofile=coverage.txt -covermode=atomic
 
 image:
-	@$(DOCKER) build -t message_gateway .
+	@docker build -t message_gateway .
 
 clean:
-	@$(GOCMD) clean
+	@go clean
 	@rm -f ./message_gateway

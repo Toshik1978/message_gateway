@@ -1,8 +1,9 @@
-module gitlab.thedatron.ru/anton/message_gateway
+module github.com/Toshik1978/message_gateway
 
-go 1.12
+go 1.13
 
 require (
+	github.com/axw/gocov v1.0.0 // indirect
 	github.com/dchest/uniuri v0.0.0-20160212164326-8902c56451e9 // indirect
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/golang/mock v1.3.1
@@ -21,4 +22,5 @@ require (
 	golang.org/x/net v0.0.0-20190827160401-ba9fcec4b297
 	golang.org/x/sys v0.0.0-20190826190057-c7b8b68b1456 // indirect
 	golang.org/x/text v0.3.2 // indirect
+	golang.org/x/tools v0.0.0-20191029041327-9cc4af7d6b2c // indirect
 )

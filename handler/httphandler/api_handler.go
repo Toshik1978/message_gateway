@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Toshik1978/message_gateway/handler"
 	"github.com/pkg/errors"
-	"gitlab.thedatron.ru/anton/message_gateway/handler"
 	"go.uber.org/zap"
 )
 
